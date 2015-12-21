@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>2 column Google maps, foursquare (outer scroll)</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+    
+		<script src="http://maps.googleapis.com/maps/api/js"></script>
+
+		<script>
+		function initialize() {
+			myCenter = new google.maps.LatLng(51.508742,-0.120850);
+
+			var mapProp = {
+				center:myCenter,
+				zoom:13,
+				mapTypeId:google.maps.MapTypeId.ROADMAP
+			};
+			var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+			// adicionando markers de acordo com latitude/longitude do myCenter
+			var marker=new google.maps.Marker({position:myCenter,});
+			marker.setMap(map);
+		
+			// criando circulo de raio 2km em relacao ao myCenter
+			var myCity = new google.maps.Circle({
+				center:myCenter,
+				radius:2000,
+				strokeColor:"#0000FF",
+				strokeOpacity:0.2,
+				strokeWeight:2,
+				fillColor:"#0000FF",
+				fillOpacity:0.1
+			});
+			myCity.setMap(map);
+
+			// zoom no myCenter quando clica no marker
+			google.maps.event.addListener(marker,'click',function() {
+  			map.setZoom(13);
+  			map.setCenter(marker.getPosition());
+  		});
+
+			// infobox com o nome do restaurante, qtdd de negativos e qtdd de positivos
+			var infowindow = new google.maps.InfoWindow({content:"Restaurant's name: P=10 | N=5"});
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+
+			});
+		}
+		google.maps.event.addDomListener(window, 'load', initialize);
+		</script>
+
+	</head>
+	<body>
+<!-- begin template -->
+<div class="navbar navbar-custom navbar-fixed-top">
+ <div class="navbar-header"><a class="navbar-brand" href="#">Enter a location</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <form class="navbar-form">
+        <div class="form-group" style="display:inline;">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="What are searching for?">
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+<div id="map-canvas"></div>
+<div class="container-fluid" id="main">
+  <div class="row">
+  	<div class="col-xs-5" id="left">
+    
+      <h2>FourSquare Reviews</h2>
+			<br><h4> Restaurant's name </h4></br>
+			<br>POSITVE REVIEWS</br>
+			<br>NEGATIVE REVIEWS</br>
+
+    </div>
+    <div class="col-xs-4"><!--map-canvas will be postioned here-->
+    	<div id="googleMap" style="width:730px;height:600px;"></div>
+	</div>
+</div>
+<!-- end template -->
+
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="http://maps.googleapis.com/maps/api/js?sensor=false&extension=.js&output=embed"></script>
+		<script src="js/scripts.js"></script>
+	</body>
+</html>
