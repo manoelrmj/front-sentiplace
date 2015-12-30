@@ -15,6 +15,8 @@ function initMap() { // inicializando um objeto mapa
 	updateMap(map, true);
 	//updateCircleRadius(map, myCenter);
 	addingMarkers();
+	document.getElementById("tips_area").style.visibility="hidden";
+	$("#category").click(function() { choosingPlacesCategory(); });
 }
 
 function updateMap(map, first) {

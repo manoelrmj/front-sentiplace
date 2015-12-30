@@ -43,29 +43,36 @@
 	  <div class="row">
 		<div class="col-xs-6" id="left">
 			<div class="text-center" style="background-color:#D8D8D8">
-				<br><h2>FourSquare Reviews</h2></br>
-				<br><h4 id="restaurants_name">Waiting for a restaurant...</h4></br>
+				<h2>FourSquare Reviews</h2>
 			</div>
 			<div class="row">
-				<div class="col-xs-6" style="background-color:#85e085; height: 700px;">	
-					<div style="background-color:#53c653;">
-						<br><h4 style="color: white" class="text-center"><b>POSITIVE REVIEWS</b></h4></br>
-					</div>
-					<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 590px;overflow: auto;">
-						<br><ul><div id="positive_reviews"></div><br>
-					</div>
-  
+				<div class="col-xs-8" id="left">
+					<h4 id="restaurants_name">Waiting for a place...</h4>
 				</div>
-				<div class="col-xs-6" style="background-color:#ff8080; height: 700px ">	
-					<div style="background-color:#ff4d4d;">
-						<br><h4 style="color: white" class="text-center"><b>NEGATIVE REVIEWS</b></h4></br>
-					</div>
-					<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 590px;overflow: auto;">
-						<br><ul><div id="negative_reviews"></div></ul><br>
-					</div>
+				<div class="col-xs-4 form-group">
+					Choose a place category
+					<select class="form-control" id="category">
+						<option id="all_category">All places</option>
+						<option id="food_category">Food</option>
+						<option id="hotel_category">Hotel</option>
+						<option id="bar_category">Pubs</option>
+					</select>
 				</div>
 			</div>
-
+			<div class="row" id="tips_area">
+				<div style="background-color:#53c653;">
+					<h4 style="color: white" class="text-center"><b>POSITIVE REVIEWS</b></h4>
+				</div>
+				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
+					<br><ul><div id="positive_reviews"></div><br>
+				</div>
+				<div style="background-color:#ff4d4d;">
+					<h4 style="color: white" class="text-center"><b>NEGATIVE REVIEWS</b></h4>
+				</div>
+				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
+					<br><ul><div id="negative_reviews"></div></ul><br>
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-6"><!--map-canvas will be postioned here-->
 			<div class="well">

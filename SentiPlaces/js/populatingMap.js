@@ -1,4 +1,5 @@
 function addingMarkers() {
+	document.getElementById("tips_area").style.visibility="visible";
 	var myCenter = map.getCenter();
 	//var lat = console.log(myCenter.lat());
 	//var lng = console.log(myCenter.lng());	
@@ -99,6 +100,14 @@ function markersInfoBox(i, location) {
 
 function removingMarkers() {
 	
+}
+
+function choosingPlacesCategory() {
+	var placeCategory = document.getElementById("category").value;
+	console.log(placeCategory);
+	document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
+	document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
+	addingMarkers(placeCategory);
 }
 
 function getReviews() {	
