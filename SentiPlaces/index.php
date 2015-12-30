@@ -29,10 +29,10 @@
         <div class="form-group" style="display:inline;">
           <div class="input-group">
 			<div class="row">
-				<div class="col-sm-10 "> <input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:500px" onclick="getSearchLocation()"></div></input>
+				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:500px" onclick="getSearchLocation()"></div></input>
 			</div>
-          </div>
         </div>
+		</div>
       </form>
     </div>
 </div>
@@ -40,17 +40,16 @@
 <div id="map-canvas"></div>
 <div class="container-fluid" id="main">
 	<div class="jumbotron"> <!-- deixa o conteudo texto responsivo -->
-	  <div class="row">
+	  <div class="row">	
 		<div class="col-xs-6" id="left">
-			<div class="text-center" style="background-color:#D8D8D8">
-				<h2>FourSquare Reviews</h2>
-			</div>
+			<div style="background-color:#D8D8D8" class="col-xs-9 text-center"><h2>FourSquare Tips</h2></div>
+			<div style="background-color:#D8D8D8" class="col-xs-3 id="right"> <img  height="63px" src="css/SentiPlaces.png"/> </div>
 			<div class="row">
 				<div class="col-xs-8" id="left">
-					<h4 id="restaurants_name">Waiting for a place...</h4>
+					<br><h4 id="restaurants_name">Waiting for a place...</h4>
 				</div>
 				<div class="col-xs-4 form-group">
-					Choose a place category
+					<br>Choose a place category
 					<select class="form-control" id="category">
 						<option id="all_category">All places</option>
 						<option id="food_category">Food</option>
