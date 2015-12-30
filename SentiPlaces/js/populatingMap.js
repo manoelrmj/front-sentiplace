@@ -1,53 +1,106 @@
+function createCORSRequest(method, url) {
+	var xhr = new XMLHttpRequest();
+	if ("withCredentials" in xhr) {
+
+	    // Check if the XMLHttpRequest object has a "withCredentials" property.
+	    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+		xhr.open(method, url, true);
+	} else if (typeof XDomainRequest != "undefined") {
+		// Otherwise, check if XDomainRequest.
+		// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+		xhr = new XDomainRequest();
+		xhr.open(method, url);
+	} else {
+		// Otherwise, CORS is not supported by the browser.
+		xhr = null;
+	}
+	return xhr;
+}
+
 function addingMarkers() {
 	document.getElementById("tips_area").style.visibility="visible";
+	
+	// Declare and set location variables
 	var myCenter = map.getCenter();
-	//var lat = console.log(myCenter.lat());
-	//var lng = console.log(myCenter.lng());	
-	
-	var location = [ // restaurant's name | lat | lng | qtdReviewsPos | qtdReviewsNeg
-		['Restaurant 1', -31.387, 150.651, 20, 30],
-		['Restaurant 2', -31.385, 150.652, 22, 30],
-		['Restaurant 3', -31.382, 150.653, 24, 30],
-		['Restaurant 4', -31.380, 150.654, 26, 30],
-		['Restaurant 5', -31.387, 150.664, 28, 30],
-		['Restaurant 6', -31.388, 150.651, 30, 30],
-		['Restaurant 7', -31.379, 150.652, 32, 30],
-		['Restaurant 8', -31.380, 150.643, 34, 30],
-		['Restaurant 9', -31.383, 150.654, 36, 30],
-		['Restaurant 10', -31.381, 150.664, 38, 30],
-		['Restaurant 11', -31.386, 150.664, 40, 30]
-    ];
-	
-	var geocoder, i;
-	var markerColor, markerOpacity;
-	
-    // Loop through our array of markers & place each one on the map  
-    for (i = 0; i < location.length; i++) {
-        var position = new google.maps.LatLng(location[i][1], location[i][2]);
-		var polarity = location[i][3] - location[i][4];
-		
-		markerColor = markersColors(polarity);
-		markerOpacity = markersOpacity(polarity);
-		
-		var restaurantMarker = { // marker's icon
-			path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
-			fillColor: markerColor,
-			fillOpacity: markerOpacity,
-			scale: 0.16,
-			strokeColor: "black",
-			strokeWeight: 0.5
-		};
-		
-		marker = new google.maps.Marker({
-			position: position,
-			icon: restaurantMarker,
-			map: map,
-			title: location[i][0]
-		});
+	var lat = myCenter.lat();
+	var lng = myCenter.lng();
+	var rdbRadius = document.getElementsByName("radius");	
+	for(var i = 0; i < rdbRadius.length; i++)
+		if(rdbRadius[i].checked) 
+			radius = rdbRadius[i].value*1000; // Radius value must be sent to API in meters
 
-		markersInfoBox(i, location);
-		getReviews();
-    }
+	console.log("Lat: " + lat);
+	console.log("Lng: " + lng);
+	console.log("Radius: " + radius);
+
+	// API Call handle
+	var xhr = new XMLHttpRequest();
+	var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + 
+		"&lng=" + lng + "&rd=" + radius);
+	//console.log(closestVenuesURL);
+	/*xhr.open("GET", closestVenuesURL, false);
+	xhr.setRequestHeader('Content-Type', 'text/json');
+	xhr.send();
+	console.log(xhr.status);
+	console.log(xhr.statusText);
+
+	var json_response = JSON.parse(xhr.responseText);
+	console.log(json_response);*/
+	var xhr = createCORSRequest('GET', closestVenuesURL);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	// This function parse the JSON response and put the places in the map
+	xhr.onload = function() { 
+		// process the response.
+		var json_response = JSON.parse(xhr.responseText);
+		var location = [];
+		for (var i = 0; i < json_response.length; i++){
+			//console.log(json_response[i].name);
+			var aux_array = [json_response[i].name, json_response[i].location.lat, json_response[i].location.lng,
+			 	json_response[i].polarityAux.positiveCount, json_response[i].polarityAux.negativeCount];
+			location.push(aux_array);
+		}
+
+		var geocoder, i;
+		var markerColor, markerOpacity;
+		
+	    // Loop through our array of markers & place each one on the map  
+	    for (i = 0; i < location.length; i++) {
+	        var position = new google.maps.LatLng(location[i][1], location[i][2]);
+			var polarity = location[i][3] - location[i][4];
+			
+			markerColor = markersColors(polarity);
+			markerOpacity = markersOpacity(polarity);
+			
+			var restaurantMarker = { // marker's icon
+				path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+				fillColor: markerColor,
+				fillOpacity: markerOpacity,
+				scale: 0.16,
+				strokeColor: "black",
+				strokeWeight: 0.5
+			};
+			
+			marker = new google.maps.Marker({
+				position: position,
+				icon: restaurantMarker,
+				map: map,
+				title: location[i][0]
+			});
+
+			markersInfoBox(i, location);
+			getReviews();
+	    }
+	};
+	xhr.onerror = function() {
+		console.log('An error occurred while retrieving venues from server');
+	};
+
+	xhr.send();
+		
+	console.log("data received:");
+	console.log(location);
 }
 
 function markersColors(polarity) { // polarity = location[i][3]

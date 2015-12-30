@@ -61,13 +61,13 @@
 			</div>
 			<div class="row" id="tips_area">
 				<div style="background-color:#53c653;">
-					<h4 style="color: white" class="text-center"><b>POSITIVE REVIEWS</b></h4>
+					<h4 style="color: white" class="text-center"><b>Positive Reviews</b></h4>
 				</div>
 				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
 					<br><ul><div id="positive_reviews"></div><br>
 				</div>
 				<div style="background-color:#ff4d4d;">
-					<h4 style="color: white" class="text-center"><b>NEGATIVE REVIEWS</b></h4>
+					<h4 style="color: white" class="text-center"><b>Negative Reviews</b></h4>
 				</div>
 				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
 					<br><ul><div id="negative_reviews"></div></ul><br>

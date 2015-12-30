@@ -5,7 +5,8 @@ var marker;
 
 function initMap() { // inicializando um objeto mapa
 	myRadius = 2000;
-	var myCenter = new google.maps.LatLng(-31.383, 150.664);
+	// UFMG Campus
+	var myCenter = new google.maps.LatLng(-19.8714019,-43.9703503); 
 	var myZoom = 13;
 	map = new google.maps.Map(document.getElementById('googleMap'), {
 		center: myCenter,
@@ -14,7 +15,7 @@ function initMap() { // inicializando um objeto mapa
 	myCity = new google.maps.Circle({center:myCenter});
 	updateMap(map, true);
 	//updateCircleRadius(map, myCenter);
-	addingMarkers();
+	//addingMarkers();
 	document.getElementById("tips_area").style.visibility="hidden";
 	$("#category").click(function() { choosingPlacesCategory(); });
 }
@@ -39,11 +40,17 @@ function updateMap(map, first) {
 			// criando circulo de raio 2km em relacao ao myCenter
 			$("#radius_option").click(function() { updateCircleRadius(map, myCenter); });	
 			if (first == true) updateCircleRadius(map, myCenter); // cria o circulo default, de 2km		
+			addingMarkers();
 
 		}, function() {
-			handleLocationError(true, infoWindow, map.getCenter());
+			//handleLocationError(true, infoWindow, map.getCenter());
+			handleLocationError();
 		});
-	}
+	}	
+}
+
+function handleLocationError(){
+	window.alert("We weren't able to determine your location. Please, check your browser settings.");
 }
 
 function updateCircleRadius(map, myCenter) {
@@ -160,8 +167,8 @@ function updateLocation(option, autocomplete) {
 	infowindow.open(map, marker);
 		
 	myCenter = place.geometry.location;
-	console.log(myCenter.lat());
-	console.log(myCenter.lng());
+	//console.log(myCenter.lat());
+	//console.log(myCenter.lng());
 	updateCircleRadius(map, myCenter);	
 	
 	$("#radius_option").click(function() { updateCircleRadius(map, myCenter) });
