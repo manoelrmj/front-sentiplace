@@ -1,5 +1,5 @@
 var restaurantMarker;
-var place_marker = new Array();
+var place_marker;// = new Array();
 
 function createCORSRequest(method, url) {
 	var xhr = new XMLHttpRequest();
@@ -22,8 +22,7 @@ function createCORSRequest(method, url) {
 
 function addingMarkers() {
 	document.getElementById("tips_area").style.visibility="visible";
-	
-	place_marker.setMap(null);
+	//place_marker.setMap(null);
 	// Declare and set location variables
 	var myCenter = map.getCenter();
 	var lat = myCenter.lat();
@@ -68,10 +67,10 @@ function addingMarkers() {
 
 		var geocoder, i;
 		var markerColor, markerOpacity;
-		for (i=0;i<place_marker.length;i++) {
+		/*for (i=0;i<place_marker.length;i++) {
 			console.log(place_marker[i]);
 			place_marker[i].setMap(null);
-		}
+		}*/
 		
 	    // Loop through our array of markers & place each one on the map  
 	    for (i = 0; i < location.length; i++) {
@@ -81,21 +80,33 @@ function addingMarkers() {
 			markerColor = markersColors(polarity);
 			markerOpacity = markersOpacity(polarity);
 			
+			// star marker
 			restaurantMarker = { // marker's icon
+				//path: google.maps.SymbolPath.CIRCLE,
 				path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
 				fillColor: markerColor,
 				fillOpacity: markerOpacity,
-				scale: 0.16,
+				scale: 0.12,
 				strokeColor: "black",
 				strokeWeight: 0.5
 			};
-
-			place_marker[i] = new google.maps.Marker({
+			place_marker = new google.maps.Marker({
 				position: position,
 				icon: restaurantMarker,
 				map: map,
 				title: location[i][1]
 			});
+
+			/*
+			// circle marker
+			place_marker=new google.maps.Marker({position:position, icon: {
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 7,
+				fillColor: markerColor,
+				fillOpacity: markerOpacity,
+				strokeWeight: 1
+			}});
+			place_marker.setMap(map);*/				
 
 			markersInfoBox(i, location);
 			//getReviews();
@@ -138,7 +149,7 @@ function markersOpacity(polarity) {
 
 function markersInfoBox(i, location) {
 	infowindow = new google.maps.InfoWindow()
-	google.maps.event.addListener(marker, 'click', (function(marker, i) {
+	google.maps.event.addListener(place_marker, 'click', (function(place_marker, i) {
 			return function() {
 				position = new google.maps.LatLng(location[i][2], location[i][3]);
 				geocoder = new google.maps.Geocoder();
@@ -147,7 +158,7 @@ function markersInfoBox(i, location) {
 						if (results[1]) {
 							qtdReviews = location[i][4] + location[i][5];
 							infowindow.setContent("<b><center>" + location[i][1] + "</b><br>" + results[1].formatted_address + "<br>Number of reviews: " + qtdReviews + "<br>" + location[i][4] + "+ | " + location[i][5] + "-");
-							infowindow.open(map, marker);
+							infowindow.open(map, place_marker);
 						}
 					}
 					document.getElementById("restaurants_name").innerHTML = location[i][1]; //adicionando o nome do restaurante ao HTML
@@ -157,7 +168,7 @@ function markersInfoBox(i, location) {
 				});
 			}
 			
-      })(marker, i));
+      })(place_marker, i));
 }
 
 function removingMarkers() {

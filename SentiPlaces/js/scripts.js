@@ -2,6 +2,7 @@ var myCity;
 var map;
 var myRadius;
 var marker;
+var myZoom;
 
 $(document).ready(function() {
 	 $('#ex1').slider({
@@ -14,10 +15,9 @@ $(document).ready(function() {
 });
 
 function initMap() { // inicializando um objeto mapa
-	myRadius = 2000;
-	// UFMG Campus
-	var myCenter = new google.maps.LatLng(-19.8714019,-43.9703503); 
-	var myZoom = 13;
+	myRadius = 1000;
+	var myCenter = new google.maps.LatLng(-19.8714019,-43.9703503);  // UFMG Campus
+	myZoom = 15;
 	map = new google.maps.Map(document.getElementById('googleMap'), {
 		center: myCenter,
 		zoom: myZoom	
@@ -34,8 +34,7 @@ function initMap() { // inicializando um objeto mapa
 
 function updateMap(map, first) {
 	var pos, marker;
-	//var myRadius = 2000;
-	var myZoom = 13;
+	//var myZoom = 14;
 	var myCity;
 	
 	//removingMarkers();	
@@ -66,6 +65,10 @@ function handleLocationError(){
 }
 
 function updateCircleRadius(map, myCenter) {
+	if (myRadius == 4000) map.setZoom(14);
+	else if (myRadius == 7000) map.setZoom(13);
+	else if (myRadius > 7000) map.setZoom(12);
+	else map.setZoom(15);
 	removingCircles();
 	addingMarkers(); //
 	/*var rads = document.getElementsByName("radius");
@@ -77,7 +80,7 @@ function updateCircleRadius(map, myCenter) {
 	myRadius = myRadius * 1000;*/
 	myCity = new google.maps.Circle({
 		center:myCenter,
-		radius:myRadius,
+		radius:myRadius+200,
 		strokeColor:"#0000FF",
 		strokeOpacity:0.2,
 		strokeWeight:2,
@@ -106,7 +109,7 @@ function updateMarkerPosition() {
 
 function updateUsersPosition(map, detectLocation) {
 	var myCenter = map.getCenter();
-	var myZoom = map.getZoom();	
+	//var myZoom = map.getZoom();	
 
 	updateMarkerPosition();
 	
@@ -139,8 +142,7 @@ function updateUsersPosition(map, detectLocation) {
 
 function updateLocation(option, autocomplete) {	
 	//var myRadius = 2000; // valor default
-	var myZoom = 13; // valor default
-	
+
 	/*if (option == 0) {
 		var rads = document.getElementsByName("radius");
 		for(var i = 0; i < rads.length; i++){
