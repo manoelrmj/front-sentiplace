@@ -42,8 +42,9 @@
 	<div class="jumbotron"> <!-- deixa o conteudo texto responsivo -->
 	  <div class="row">	
 		<div class="col-xs-6" id="left">
-			<div style="background-color:#D8D8D8" class="col-xs-9 text-center"><h2>FourSquare Tips</h2></div>
-			<div style="background-color:#D8D8D8" class="col-xs-3 id="right"> <img  height="63px" src="css/SentiPlaces.png"/> </div>
+			<!-- <div style="background-color:#D8D8D8" class="col-xs-9 text-center"><h2>FourSquare Tips</h2></div> -->
+			<div style="background-color:#D8D8D8" class="col-xs-12 text-center"><img  height="63px" src="css/SentiPlaces.png"/></div>
+			<!-- <div style="background-color:#D8D8D8" class="col-xs-3 id="right"> <img  height="63px" src="css/SentiPlaces.png"/> </div> -->
 			<div class="row">
 				<div class="col-xs-8" id="left">
 					<br><h4 id="restaurants_name">Waiting for a place...</h4>

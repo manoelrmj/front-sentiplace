@@ -132,7 +132,7 @@ function updateLocation(option, autocomplete) {
 		var rads = document.getElementsByName("radius");
 		for(var i = 0; i < rads.length; i++){
 			if(rads[i].checked) {
-				console.log(rads[i].value);
+				//console.log(rads[i].value);
 				myRadius = rads[i].value;
 			}
 		} 
