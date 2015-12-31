@@ -29,9 +29,9 @@ function addingMarkers() {
 		if(rdbRadius[i].checked) 
 			radius = rdbRadius[i].value*1000; // Radius value must be sent to API in meters
 
-	console.log("Lat: " + lat);
-	console.log("Lng: " + lng);
-	console.log("Radius: " + radius);
+	//console.log("Lat: " + lat);
+	//console.log("Lng: " + lng);
+	//console.log("Radius: " + radius);
 
 	// API Call handle
 	var xhr = new XMLHttpRequest();
@@ -57,7 +57,7 @@ function addingMarkers() {
 		var location = [];
 		for (var i = 0; i < json_response.length; i++){
 			//console.log(json_response[i].name);
-			var aux_array = [json_response[i].name, json_response[i].location.lat, json_response[i].location.lng,
+			var aux_array = [json_response[i].id, json_response[i].name, json_response[i].location.lat, json_response[i].location.lng,
 			 	json_response[i].polarityAux.positiveCount, json_response[i].polarityAux.negativeCount];
 			location.push(aux_array);
 		}
@@ -67,8 +67,8 @@ function addingMarkers() {
 		
 	    // Loop through our array of markers & place each one on the map  
 	    for (i = 0; i < location.length; i++) {
-	        var position = new google.maps.LatLng(location[i][1], location[i][2]);
-			var polarity = location[i][3] - location[i][4];
+	        var position = new google.maps.LatLng(location[i][2], location[i][3]);
+			var polarity = location[i][4] - location[i][5];
 			
 			markerColor = markersColors(polarity);
 			markerOpacity = markersOpacity(polarity);
@@ -86,11 +86,11 @@ function addingMarkers() {
 				position: position,
 				icon: restaurantMarker,
 				map: map,
-				title: location[i][0]
+				title: location[i][1]
 			});
 
 			markersInfoBox(i, location);
-			getReviews();
+			//getReviews();
 	    }
 	};
 	xhr.onerror = function() {
@@ -99,8 +99,8 @@ function addingMarkers() {
 
 	xhr.send();
 		
-	console.log("data received:");
-	console.log(location);
+	//console.log("data received:");
+	//console.log(location);
 }
 
 function markersColors(polarity) { // polarity = location[i][3]
@@ -132,19 +132,20 @@ function markersInfoBox(i, location) {
 	infowindow = new google.maps.InfoWindow()
 	google.maps.event.addListener(marker, 'click', (function(marker, i) {
 			return function() {
-				position = new google.maps.LatLng(location[i][1], location[i][2]);
+				position = new google.maps.LatLng(location[i][2], location[i][3]);
 				geocoder = new google.maps.Geocoder();
 				geocoder.geocode({'latLng': position}, function (results, status) {
 					if (status === google.maps.GeocoderStatus.OK) {
 						if (results[1]) {
-							qtdReviews = location[i][3] + location[i][4];
-							infowindow.setContent("<b><center>" + location[i][0] + "</b><br>" + results[1].formatted_address + "<br>Number of reviews: " + qtdReviews + "<br>+" + location[i][3] + " | -" + location[i][4]);
+							qtdReviews = location[i][4] + location[i][5];
+							infowindow.setContent("<b><center>" + location[i][1] + "</b><br>" + results[1].formatted_address + "<br>Number of reviews: " + qtdReviews + "<br>" + location[i][4] + "+ | " + location[i][5] + "-");
 							infowindow.open(map, marker);
 						}
 					}
-					document.getElementById("restaurants_name").innerHTML = location[i][0]; //adicionando o nome do restaurante ao HTML
+					document.getElementById("restaurants_name").innerHTML = location[i][1]; //adicionando o nome do restaurante ao HTML
 					map.setCenter(position);
 					map.setZoom(14);
+					getReviews(location[i]);
 				});
 			}
 			
@@ -157,14 +158,36 @@ function removingMarkers() {
 
 function choosingPlacesCategory() {
 	var placeCategory = document.getElementById("category").value;
-	console.log(placeCategory);
+	//console.log(placeCategory);
 	document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
 	document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
 	addingMarkers(placeCategory);
 }
 
-function getReviews() {	
-	google.maps.event.addListener(marker, 'click', (function(marker, i) {
+function getReviews(location) {	
+	var xhr = new XMLHttpRequest();
+	var tipsByVenueURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/tipsbyvenue?venueid=" + location[0]);
+	console.log(tipsByVenueURL);
+	var xhr = createCORSRequest('GET', tipsByVenueURL);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	// This function parse the JSON response and put the tips in the text fields
+	xhr.onload = function() { 
+		// process the response.
+		document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
+		document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
+		var json_response = JSON.parse(xhr.responseText);
+		console.log(json_response);
+	};
+	xhr.onerror = function() {
+		console.log('An error occurred while retrieving venues from server');
+	};
+
+	xhr.send();	
+
+	/*google.maps.event.addListener(marker, 'click', (function(marker, i) {
+		//console.log(marker);
 		document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
 		document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
 		
@@ -181,5 +204,5 @@ function getReviews() {
 		for (i = 0; i < negativeReviews.length; i++) {
 			document.getElementById("negative_reviews").innerHTML += "<li>" + negativeReviews[i] + "</li>"; // adiciona os reviews negativos
 		}
-	}));
+	}));*/
 }

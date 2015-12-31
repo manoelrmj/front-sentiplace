@@ -29,7 +29,7 @@
         <div class="form-group" style="display:inline;">
           <div class="input-group">
 			<div class="row">
-				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:500px" onclick="getSearchLocation()"></div></input>
+				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are you searching for?" style="width:500px" onclick="getSearchLocation()"></div></input>
 			</div>
         </div>
 		</div>
