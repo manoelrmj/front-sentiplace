@@ -3,6 +3,16 @@ var map;
 var myRadius;
 var marker;
 
+$(document).ready(function() {
+	 $('#ex1').slider({
+		formatter: function(radius) {
+			//document.getElementById("radius").innerHTML = radius;
+			myRadius = radius * 1000;
+	        return 'Current value: ' + radius + ' km';
+	    }
+	});
+});
+
 function initMap() { // inicializando um objeto mapa
 	myRadius = 2000;
 	// UFMG Campus
@@ -13,16 +23,18 @@ function initMap() { // inicializando um objeto mapa
 		zoom: myZoom	
 	});
 	myCity = new google.maps.Circle({center:myCenter});
+	place_marker = new google.maps.Marker({
+		position: new google.maps.LatLng(0,0),
+		map: map,
+	});
 	updateMap(map, true);
-	//updateCircleRadius(map, myCenter);
-	//addingMarkers();
 	document.getElementById("tips_area").style.visibility="hidden";
 	$("#category").click(function() { choosingPlacesCategory(); });
 }
 
 function updateMap(map, first) {
 	var pos, marker;
-	var myRadius = 2000;
+	//var myRadius = 2000;
 	var myZoom = 13;
 	var myCity;
 	
@@ -55,13 +67,14 @@ function handleLocationError(){
 
 function updateCircleRadius(map, myCenter) {
 	removingCircles();
-	var rads = document.getElementsByName("radius");
+	addingMarkers(); //
+	/*var rads = document.getElementsByName("radius");
 	for(var i = 0; i < rads.length; i++){
 		if(rads[i].checked) {
 			myRadius = rads[i].value;
 		}
 	} 
-	myRadius = myRadius * 1000;
+	myRadius = myRadius * 1000;*/
 	myCity = new google.maps.Circle({
 		center:myCenter,
 		radius:myRadius,
@@ -125,10 +138,10 @@ function updateUsersPosition(map, detectLocation) {
 }
 
 function updateLocation(option, autocomplete) {	
-	var myRadius = 2000; // valor default
+	//var myRadius = 2000; // valor default
 	var myZoom = 13; // valor default
 	
-	if (option == 0) {
+	/*if (option == 0) {
 		var rads = document.getElementsByName("radius");
 		for(var i = 0; i < rads.length; i++){
 			if(rads[i].checked) {
@@ -136,7 +149,7 @@ function updateLocation(option, autocomplete) {
 				myRadius = rads[i].value;
 			}
 		} 
-	}
+	}*/
 	 
 	var infowindow = new google.maps.InfoWindow();
 	//infowindow.close();

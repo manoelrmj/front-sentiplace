@@ -1,3 +1,6 @@
+var restaurantMarker;
+var place_marker = new Array();
+
 function createCORSRequest(method, url) {
 	var xhr = new XMLHttpRequest();
 	if ("withCredentials" in xhr) {
@@ -20,14 +23,15 @@ function createCORSRequest(method, url) {
 function addingMarkers() {
 	document.getElementById("tips_area").style.visibility="visible";
 	
+	place_marker.setMap(null);
 	// Declare and set location variables
 	var myCenter = map.getCenter();
 	var lat = myCenter.lat();
 	var lng = myCenter.lng();
-	var rdbRadius = document.getElementsByName("radius");	
+	/*var rdbRadius = document.getElementsByName("radius");	
 	for(var i = 0; i < rdbRadius.length; i++)
 		if(rdbRadius[i].checked) 
-			radius = rdbRadius[i].value*1000; // Radius value must be sent to API in meters
+			radius = rdbRadius[i].value*1000; // Radius value must be sent to API in meters*/
 
 	//console.log("Lat: " + lat);
 	//console.log("Lng: " + lng);
@@ -36,7 +40,7 @@ function addingMarkers() {
 	// API Call handle
 	var xhr = new XMLHttpRequest();
 	var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + 
-		"&lng=" + lng + "&rd=" + radius);
+		"&lng=" + lng + "&rd=" + myRadius); // var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + "&lng=" + lng + "&rd=" + radius);
 	//console.log(closestVenuesURL);
 	/*xhr.open("GET", closestVenuesURL, false);
 	xhr.setRequestHeader('Content-Type', 'text/json');
@@ -64,6 +68,10 @@ function addingMarkers() {
 
 		var geocoder, i;
 		var markerColor, markerOpacity;
+		for (i=0;i<place_marker.length;i++) {
+			console.log(place_marker[i]);
+			place_marker[i].setMap(null);
+		}
 		
 	    // Loop through our array of markers & place each one on the map  
 	    for (i = 0; i < location.length; i++) {
@@ -73,7 +81,7 @@ function addingMarkers() {
 			markerColor = markersColors(polarity);
 			markerOpacity = markersOpacity(polarity);
 			
-			var restaurantMarker = { // marker's icon
+			restaurantMarker = { // marker's icon
 				path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
 				fillColor: markerColor,
 				fillOpacity: markerOpacity,
@@ -81,8 +89,8 @@ function addingMarkers() {
 				strokeColor: "black",
 				strokeWeight: 0.5
 			};
-			
-			marker = new google.maps.Marker({
+
+			place_marker[i] = new google.maps.Marker({
 				position: position,
 				icon: restaurantMarker,
 				map: map,

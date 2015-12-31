@@ -17,7 +17,7 @@
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link href="css/styles.css" rel="stylesheet">	
-				
+		<link href="css/bootstrap-slider.css" rel="stylesheet">			
 	</head>
 	<body onload="initMap()"> 
 	<!--<body onload="findUserLocation()">--?
@@ -78,12 +78,13 @@
 			<div class="well">
 				Filter by Radius:<br>
 				<form action="" id="radius_option">
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="2" checked="checked">2km</div>
+					<div class = "text-center" ><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="16" data-slider-step="3" data-slider-value="1"/></div>
+					<!--<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="2" checked="checked">2km</div>
 					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="4">4km</div>
 					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="8">8km<br></div>
 					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="12">12km<br></div>
 					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="20">20km<br></div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="30">30km<br></div><br>
+					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="30">30km<br></div><br>-->
 				</form>
 			</div>			
 			<div id="googleMap" class="img-responsive"></div>
@@ -99,6 +100,8 @@
 		<script src="http://maps.googleapis.com/maps/api/js?sensor=false&extension=.js&output=embed"></script>
 		<script src="js/scripts.js"></script>
 		<script src="js/populatingMap.js"></script>
+		<script type='text/javascript' src="js/bootstrap-slider.js"></script>
+		<script type='text/javascript' src="js/modernizr.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
 	</body>
