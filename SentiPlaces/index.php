@@ -29,7 +29,8 @@
         <div class="form-group" style="display:inline;">
           <div class="input-group">
 			<div class="row">
-				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are you searching for?" style="width:500px" onclick="getSearchLocation()"></div></input>
+				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:580px" onclick="getSearchLocation()"></div></input>
+				<div class="col-xs-2 text-center"> <a onclick="getSearchLocation();"><img src="css/search_icon.png" height="33px" /></a></div>
 			</div>
         </div>
 		</div>
@@ -42,9 +43,7 @@
 	<div class="jumbotron"> <!-- deixa o conteudo texto responsivo -->
 	  <div class="row">	
 		<div class="col-xs-6" id="left">
-			<!-- <div style="background-color:#D8D8D8" class="col-xs-9 text-center"><h2>FourSquare Tips</h2></div> -->
 			<div style="background-color:#D8D8D8" class="col-xs-12 text-center"><img  height="63px" src="css/SentiPlaces.png"/></div>
-			<!-- <div style="background-color:#D8D8D8" class="col-xs-3 id="right"> <img  height="63px" src="css/SentiPlaces.png"/> </div> -->
 			<div class="row">
 				<div class="col-xs-8" id="left">
 					<br><h4 id="restaurants_name">Waiting for a place...</h4>
@@ -75,8 +74,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6"><!--map-canvas will be postioned here-->
-			<div class="well">
-				Filter by Radius:<br>
+			<div class="well"> Filter by Radius: <span id="radius"></span>km
 				<form action="" id="radius_option">
 					<div class = "text-center" ><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="16" data-slider-step="3" data-slider-value="1"/></div>
 					<!--<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="2" checked="checked">2km</div>

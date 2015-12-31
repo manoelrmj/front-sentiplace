@@ -21,7 +21,6 @@ function createCORSRequest(method, url) {
 }
 
 function addingMarkers() {
-	document.getElementById("tips_area").style.visibility="visible";
 	//place_marker.setMap(null);
 	// Declare and set location variables
 	var myCenter = map.getCenter();
@@ -163,7 +162,7 @@ function markersInfoBox(i, location) {
 					}
 					document.getElementById("restaurants_name").innerHTML = location[i][1]; //adicionando o nome do restaurante ao HTML
 					map.setCenter(position);
-					map.setZoom(14);
+					map.setZoom(myZoom);
 					getReviews(location[i]);
 				});
 			}
@@ -184,6 +183,7 @@ function choosingPlacesCategory() {
 }
 
 function getReviews(location) {	
+	document.getElementById("tips_area").style.visibility="visible";
 	var xhr = new XMLHttpRequest();
 	var tipsByVenueURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/tipsbyvenue?venueid=" + location[0]);
 	console.log(tipsByVenueURL);

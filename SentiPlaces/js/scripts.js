@@ -7,7 +7,7 @@ var myZoom;
 $(document).ready(function() {
 	 $('#ex1').slider({
 		formatter: function(radius) {
-			//document.getElementById("radius").innerHTML = radius;
+			document.getElementById("radius").innerHTML = radius;
 			myRadius = radius * 1000;
 	        return 'Current value: ' + radius + ' km';
 	    }
@@ -33,10 +33,11 @@ function initMap() { // inicializando um objeto mapa
 }
 
 function updateMap(map, first) {
+	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
 	var pos, marker;
 	//var myZoom = 14;
 	var myCity;
-	
 	//removingMarkers();	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -96,6 +97,8 @@ function removingCircles() {
 }
 
 function updateMarkerPosition() {
+	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
 	// adicionando markers de acordo com latitude/longitude do myCenter
 	marker=new google.maps.Marker({position:myCenter, icon: {
 		path: google.maps.SymbolPath.CIRCLE,
@@ -108,6 +111,8 @@ function updateMarkerPosition() {
 }
 
 function updateUsersPosition(map, detectLocation) {
+	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
 	var myCenter = map.getCenter();
 	//var myZoom = map.getZoom();	
 
