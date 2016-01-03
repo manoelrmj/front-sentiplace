@@ -15,6 +15,7 @@ $(document).ready(function() {
 });
 
 function initMap() { // inicializando um objeto mapa
+	document.getElementById("tips_area").style.display="none";
 	myRadius = 1000;
 	var myCenter = new google.maps.LatLng(-19.8714019,-43.9703503);  // UFMG Campus
 	myZoom = 15;
@@ -28,13 +29,14 @@ function initMap() { // inicializando um objeto mapa
 		map: map,
 	});
 	updateMap(map, true);
-	document.getElementById("tips_area").style.visibility="hidden";
+	
 	$("#category").click(function() { choosingPlacesCategory(); });
 }
 
 function updateMap(map, first) {
-	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("tips_area").style.display="none";
 	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
 	var pos, marker;
 	//var myZoom = 14;
 	var myCity;
@@ -97,8 +99,9 @@ function removingCircles() {
 }
 
 function updateMarkerPosition() {
-	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("tips_area").style.display="none";
 	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
 	// adicionando markers de acordo com latitude/longitude do myCenter
 	marker=new google.maps.Marker({position:myCenter, icon: {
 		path: google.maps.SymbolPath.CIRCLE,
@@ -111,8 +114,9 @@ function updateMarkerPosition() {
 }
 
 function updateUsersPosition(map, detectLocation) {
-	document.getElementById("tips_area").style.visibility="hidden";
+	document.getElementById("tips_area").style.display="none";
 	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
 	var myCenter = map.getCenter();
 	//var myZoom = map.getZoom();	
 
@@ -145,21 +149,11 @@ function updateUsersPosition(map, detectLocation) {
 	}
 }
 
-function updateLocation(option, autocomplete) {	
-	//var myRadius = 2000; // valor default
+function updateLocation(option, autocomplete) {
 
-	/*if (option == 0) {
-		var rads = document.getElementsByName("radius");
-		for(var i = 0; i < rads.length; i++){
-			if(rads[i].checked) {
-				//console.log(rads[i].value);
-				myRadius = rads[i].value;
-			}
-		} 
-	}*/
-	 
+	
 	var infowindow = new google.maps.InfoWindow();
-	//infowindow.close();
+	infowindow.close();
 	
 	var place = autocomplete.getPlace();
 	if (!place.geometry) { return; }
@@ -200,6 +194,10 @@ function updateLocation(option, autocomplete) {
 		map.setCenter(place.geometry.location);
 		//infowindow.open(map, marker);
 	});
+	
+	document.getElementById("tips_area").style.display="none";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
 	
 	addingMarkers();	
 }

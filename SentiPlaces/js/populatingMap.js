@@ -21,6 +21,7 @@ function createCORSRequest(method, url) {
 }
 
 function addingMarkers() {
+	document.getElementById("loading").style.visibility="visible";
 	//place_marker.setMap(null);
 	// Declare and set location variables
 	var myCenter = map.getCenter();
@@ -54,6 +55,7 @@ function addingMarkers() {
 	}
 	// This function parse the JSON response and put the places in the map
 	xhr.onload = function() { 
+		
 		// process the response.
 		var json_response = JSON.parse(xhr.responseText);
 		var location = [];
@@ -98,25 +100,23 @@ function addingMarkers() {
 
 			/*
 			// circle marker
-			place_marker=new google.maps.Marker({position:position, icon: {
-				path: google.maps.SymbolPath.CIRCLE,
-				scale: 7,
-				fillColor: markerColor,
-				fillOpacity: markerOpacity,
-				strokeWeight: 1
-			}});
+			place_marker=new google.maps.Marker({
+				position:position,
+				icon: {path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: markerColor, fillOpacity: markerOpacity, strokeWeight: 1}
+			});
 			place_marker.setMap(map);*/				
 
 			markersInfoBox(i, location);
 			//getReviews();
+			
 	    }
+		document.getElementById("loading").style.visibility="hidden";
 	};
 	xhr.onerror = function() {
 		console.log('An error occurred while retrieving venues from server');
+		document.getElementById("loading").style.visibility="hidden";
 	};
-
 	xhr.send();
-		
 	//console.log("data received:");
 	//console.log(location);
 }
@@ -182,8 +182,19 @@ function choosingPlacesCategory() {
 	addingMarkers(placeCategory);
 }
 
+function tipsColors(polarity) { //polary range: [-4, 4]
+	var total = 8*12;
+	var width = (polarity+4)*12;
+	var positive_width = width;
+	var negative_width = total - positive_width;
+	console.log("Positive: " + positive_width + "Negative: " + negative_width);
+	return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
+			"<div style=\"background-color:#53c653; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
+}
+
 function getReviews(location) {	
-	document.getElementById("tips_area").style.visibility="visible";
+	document.getElementById("tips_area").style.display="inline";
+	document.getElementById("home_introduction").style.display="none";
 	var xhr = new XMLHttpRequest();
 	var tipsByVenueURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/tipsbyvenue?venueid=" + location[0]);
 	console.log(tipsByVenueURL);
@@ -211,10 +222,12 @@ function getReviews(location) {
 		}
 
 		for (i = 0; i < positiveReviews.length; i++) {
-			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i></li><hr>"; // adiciona os reviews positivos
+			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(2) + "</li><hr>"; // usando valor de teste
+			// document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 		for (i = 0; i < negativeReviews.length; i++) {
-			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i></li><hr>"; // adiciona os reviews negativos
+			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(-2) + "</li><hr>"; // usando valor de teste
+			// document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 
 	};

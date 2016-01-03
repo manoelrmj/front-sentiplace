@@ -20,7 +20,6 @@
 		<link href="css/bootstrap-slider.css" rel="stylesheet">			
 	</head>
 	<body onload="initMap()"> 
-	<!--<body onload="findUserLocation()">--?
 <!-- begin template -->
 <div class="navbar navbar-custom navbar-fixed-top">
  <div class="navbar-header"><a class="navbar-brand">Enter a location</a></div>
@@ -44,9 +43,9 @@
 	  <div class="row">	
 		<div class="col-xs-6" id="left">
 			<div style="background-color:#D8D8D8" class="col-xs-12 text-center"><img  height="63px" src="css/SentiPlaces.png"/></div>
-			<div class="row">
-				<div class="col-xs-8" id="left">
-					<br><h4 id="restaurants_name">Waiting for a place...</h4>
+			<div class="row"><br>
+				<div class="col-xs-8" id="left"><br>
+					<h4 id="restaurants_name">Waiting for a place...</h4>
 				</div>
 				<div class="col-xs-4 form-group">
 					<br>Choose a place category
@@ -58,18 +57,33 @@
 					</select>
 				</div>
 			</div>
+			
+			<span id="home_introduction">
+				<div class="well" style="font-size:16px; text-align:justify">
+				The SentiPlaces tool enables you to:<br><br>
+				<ul><li>Select a location and see the nearest places to go</li><br>
+				<li>Filter by a specific place category</li><br>
+				<li>Choose the coverage radius</li> <br>
+				<li>Check what people talks about the place that you picked up.</li><br>
+				<li>Identify how positive/negative the place is, based on the star color.</li></ul><br><br><br>
+							
+				All the places' tips come from Foursquare, one of the most popular local search and discovery service which provides location-based search results for its users.<br><br><br>
+				Do you wanna try it out? Select a location, a place category, and let' s go!
+				</div>
+			</span>
+			
 			<div class="row" id="tips_area">
 				<div style="background-color:#53c653;">
 					<h4 style="color: white" class="text-center"><b>Positive Reviews</b></h4>
 				</div>
-				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
-					<br><ul><div id="positive_reviews"></div><br>
+				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 312px;overflow: auto; text-align:justify; padding-right:40px;">
+					<br><ul><span id="positive_reviews"></span></ul><br>
 				</div>
 				<div style="background-color:#ff4d4d;">
 					<h4 style="color: white" class="text-center"><b>Negative Reviews</b></h4>
 				</div>
-				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 335px;overflow: auto;">
-					<br><ul><div id="negative_reviews"></div></ul><br>
+				<div style="background-color:rgba(255, 255, 255, 0.7); font-size:16px; height: 312px;overflow: auto; text-align:justify; padding-right:40px;">
+					<br><ul><span id="negative_reviews"></span></ul>
 				</div>
 			</div>
 		</div>
@@ -77,14 +91,10 @@
 			<div class="well"> Filter by Radius: <span id="radius"></span>km
 				<form action="" id="radius_option">
 					<div class = "text-center" ><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="16" data-slider-step="3" data-slider-value="1"/></div>
-					<!--<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="2" checked="checked">2km</div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="4">4km</div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="8">8km<br></div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="12">12km<br></div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="20">20km<br></div>
-					<div class="col-xs-2"><input type="radio" id="radius" name="radius" value="30">30km<br></div><br>-->
 				</form>
 			</div>			
+			<div id="loader-wrapper">
+			<div id="loading" class="text-center" style="color:#D8D8D8;"><br><h1>Loading...</h1></div>
 			<div id="googleMap" class="img-responsive"></div>
 		</div>
 	  </div>
