@@ -12,7 +12,7 @@ function createCORSRequest(method, url) {
 		// Otherwise, check if XDomainRequest.
 		// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
 		xhr = new XDomainRequest();
-		xhr.open(method, url);
+		xhr.open(method, url, false);
 	} else {
 		// Otherwise, CORS is not supported by the browser.
 		xhr = null;
@@ -40,7 +40,7 @@ function addingMarkers() {
 	var xhr = new XMLHttpRequest();
 	var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + 
 		"&lng=" + lng + "&rd=" + myRadius); // var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + "&lng=" + lng + "&rd=" + radius);
-	//console.log(closestVenuesURL);
+	console.log(closestVenuesURL);
 	/*xhr.open("GET", closestVenuesURL, false);
 	xhr.setRequestHeader('Content-Type', 'text/json');
 	xhr.send();
@@ -55,7 +55,7 @@ function addingMarkers() {
 	}
 	// This function parse the JSON response and put the places in the map
 	xhr.onload = function() { 
-		
+		//xhr.getResponseHeader('Set-Cookie');
 		// process the response.
 		var json_response = JSON.parse(xhr.responseText);
 		var location = [];
@@ -65,7 +65,7 @@ function addingMarkers() {
 			 	json_response[i].polarityAux.positiveCount, json_response[i].polarityAux.negativeCount];
 			location.push(aux_array);
 		}
-
+		console.log(location.length);
 		var geocoder, i;
 		var markerColor, markerOpacity;
 		/*for (i=0;i<place_marker.length;i++) {
@@ -106,7 +106,7 @@ function addingMarkers() {
 			});
 			place_marker.setMap(map);*/				
 
-			markersInfoBox(i, location);
+			markersInfoBox(i, location, xhr);
 			//getReviews();
 			
 	    }
@@ -146,7 +146,7 @@ function markersOpacity(polarity) {
 	return markerOpacity;	
 }
 
-function markersInfoBox(i, location) {
+function markersInfoBox(i, location, xhr) {
 	infowindow = new google.maps.InfoWindow()
 	google.maps.event.addListener(place_marker, 'click', (function(place_marker, i) {
 			return function() {
@@ -163,7 +163,7 @@ function markersInfoBox(i, location) {
 					document.getElementById("restaurants_name").innerHTML = location[i][1]; //adicionando o nome do restaurante ao HTML
 					map.setCenter(position);
 					map.setZoom(myZoom);
-					getReviews(location[i]);
+					getReviews(location[i], xhr);
 				});
 			}
 			
@@ -192,12 +192,32 @@ function tipsColors(polarity) { //polary range: [-4, 4]
 			"<div style=\"background-color:#53c653; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
 }
 
-function getReviews(location) {	
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function getReviews(location, xhr) {	
 	document.getElementById("tips_area").style.display="inline";
 	document.getElementById("home_introduction").style.display="none";
-	var xhr = new XMLHttpRequest();
+	//var xmlhttp = new XMLHttpRequest();
 	var tipsByVenueURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/tipsbyvenue?venueid=" + location[0]);
-	console.log(tipsByVenueURL);
+	//var JSESSIONID = getCookie('JSESSIONID');
+	//console.log(JSESSIONID);
+	xhr.open("GET", tipsByVenueURL, true);
+	//xhr.setRequestHeader("Cookie", "JSESSIONID=" + JSESSIONID);
+	xhr.onload = function() { 
+		console.log(xhr.status);
+	}
+	xhr.send();
+
+	/*console.log(tipsByVenueURL);
 	var xhr = createCORSRequest('GET', tipsByVenueURL);
 	if (!xhr) {
 		throw new Error('CORS not supported');
@@ -208,9 +228,10 @@ function getReviews(location) {
 		var i;
 		document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
 		document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
-		//var json_response = JSON.parse(xhr.responseText);
-		var json_response = JSON.parse('[{"id":"4d72d42d0d0ca1436106b083","text":"2 for $20!!! Haha","polarity":1},{"id":"4c7728aef2473704cb7c65eb","text":"Hottest waitresses ever!","polarity":0},{"id":"4eb88cd3e5fa17fc88199ed9","text":"correction: Cjay is known as Chris at Applebee\u0027s.","polarity":0},{"id":"4eb888625c5c5a53215815a1","text":"Make sure you request Cjay or Saif for servers. Funny, polite, attentive, and accurate. Tip \u0027em nicely, say that Dan sent you!","polarity":1},{"id":"4f558f7de4b0131bc37729d6","text":"The real Rihanna is a waitress here!! She\u0027s soooo hottttttt!!!","polarity":0},{"id":"4fe2816ae4b03b7a3de9708a","text":"Amanda is the best waitress ever! Tip her big :)","polarity":1},{"id":"4f5d0ff5e4b068aa4fddbec3","text":"The service here SUCKS","polarity":0},{"id":"4ed962b729c2b91227349b4b","text":"If you don\u0027t speak Ebonics don\u0027t bother to come here!","polarity":0},{"id":"4dc0c2f2b0fb1c18ee549763","text":"This place is the best after 10pm","polarity":1},{"id":"4d2bd15c3c7954819bfbeb9b","text":"This is the best dish!!","polarity":1},{"id":"55370639498e95c4a5e0d326","text":"This place really went down hill.  Was there today had a steak that was horrible. Manager was nice though brought me another one, but still was bad. The quality of their food really went down","polarity":-1},{"id":"522e7503498e08302c3f5076","text":"Food below average, service stink. Just  don\u0027t go.","polarity":0},{"id":"51c3c0d1498e32a301f9abd2","text":"Get here after 10; you know the deal","polarity":0},{"id":"51ac037f498ebb2eff392da7","text":"They were singing a bday song for me ) it was so loud tho and made my face red hahaha","polarity":1},{"id":"516211d3498efb317dfa226d","text":"The most water down Long Island Ice Tea! Horrible!!!!","polarity":0},{"id":"503964f6e4b0bce917240bc8","text":"The service is sooooo slow. They take there sweet ass time for everything. My grandmother who has one leg moves faster then most of the people here.","polarity":0},{"id":"50396306e4b09ecf9ed5daf7","text":"Def. should check out the guy who works there and combs his beard in plain view lol what ?","polarity":0},{"id":"4f9752a5e4b0dda0643da379","text":"I go here just for the Triple Chocolate Meltdown. Nothing else :)","polarity":1},{"id":"4f807eabe4b0ac16a1cd22ae","text":"This is probably the first time here that I don\u0027t like my waiter.","polarity":0},{"id":"4f7e120ce4b0bd0c008281bd","text":"Service sucks!!","polarity":0},{"id":"4f78eac1e4b087957c131dc8","text":"Their curbside service is the worst!!!","polarity":-1},{"id":"4f5b04a6e4b03a6a1110c6f1","text":"Jasmine the waitress is sexy as all hell.. She\u0027s the only waitress I\u0027d ever want in life","polarity":1},{"id":"4e6d55882271a8cabfc57a5f","text":"25 cent wing nite","polarity":0}]');
-		//console.log((json_response));
+		console.log("resposta: " + xhr.status);
+		var json_response = JSON.parse(xhr.responseText);
+		//var json_response = JSON.parse('[{"id":"4d72d42d0d0ca1436106b083","text":"2 for $20!!! Haha","polarity":1},{"id":"4c7728aef2473704cb7c65eb","text":"Hottest waitresses ever!","polarity":0},{"id":"4eb88cd3e5fa17fc88199ed9","text":"correction: Cjay is known as Chris at Applebee\u0027s.","polarity":0},{"id":"4eb888625c5c5a53215815a1","text":"Make sure you request Cjay or Saif for servers. Funny, polite, attentive, and accurate. Tip \u0027em nicely, say that Dan sent you!","polarity":1},{"id":"4f558f7de4b0131bc37729d6","text":"The real Rihanna is a waitress here!! She\u0027s soooo hottttttt!!!","polarity":0},{"id":"4fe2816ae4b03b7a3de9708a","text":"Amanda is the best waitress ever! Tip her big :)","polarity":1},{"id":"4f5d0ff5e4b068aa4fddbec3","text":"The service here SUCKS","polarity":0},{"id":"4ed962b729c2b91227349b4b","text":"If you don\u0027t speak Ebonics don\u0027t bother to come here!","polarity":0},{"id":"4dc0c2f2b0fb1c18ee549763","text":"This place is the best after 10pm","polarity":1},{"id":"4d2bd15c3c7954819bfbeb9b","text":"This is the best dish!!","polarity":1},{"id":"55370639498e95c4a5e0d326","text":"This place really went down hill.  Was there today had a steak that was horrible. Manager was nice though brought me another one, but still was bad. The quality of their food really went down","polarity":-1},{"id":"522e7503498e08302c3f5076","text":"Food below average, service stink. Just  don\u0027t go.","polarity":0},{"id":"51c3c0d1498e32a301f9abd2","text":"Get here after 10; you know the deal","polarity":0},{"id":"51ac037f498ebb2eff392da7","text":"They were singing a bday song for me ) it was so loud tho and made my face red hahaha","polarity":1},{"id":"516211d3498efb317dfa226d","text":"The most water down Long Island Ice Tea! Horrible!!!!","polarity":0},{"id":"503964f6e4b0bce917240bc8","text":"The service is sooooo slow. They take there sweet ass time for everything. My grandmother who has one leg moves faster then most of the people here.","polarity":0},{"id":"50396306e4b09ecf9ed5daf7","text":"Def. should check out the guy who works there and combs his beard in plain view lol what ?","polarity":0},{"id":"4f9752a5e4b0dda0643da379","text":"I go here just for the Triple Chocolate Meltdown. Nothing else :)","polarity":1},{"id":"4f807eabe4b0ac16a1cd22ae","text":"This is probably the first time here that I don\u0027t like my waiter.","polarity":0},{"id":"4f7e120ce4b0bd0c008281bd","text":"Service sucks!!","polarity":0},{"id":"4f78eac1e4b087957c131dc8","text":"Their curbside service is the worst!!!","polarity":-1},{"id":"4f5b04a6e4b03a6a1110c6f1","text":"Jasmine the waitress is sexy as all hell.. She\u0027s the only waitress I\u0027d ever want in life","polarity":1},{"id":"4e6d55882271a8cabfc57a5f","text":"25 cent wing nite","polarity":0}]');
+		console.log((json_response));
 		var positiveReviews = [];
 		var negativeReviews = [];
 		for(i=0; i<json_response.length; i++){
@@ -235,25 +256,5 @@ function getReviews(location) {
 		console.log('An error occurred while retrieving venues from server');
 	};
 
-	xhr.send();	
-
-	/*google.maps.event.addListener(marker, 'click', (function(marker, i) {
-		//console.log(marker);
-		document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
-		document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
-		
-		positiveReviews = [ "INICIO POSITIVO, DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE",
-							"DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE",
-							"DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "FIM POSITIVO"];
-		negativeReviews = [ "INICIO NEGATIVO, DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE",
-							"DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE",
-							"DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE DADOS TESTE", "DADOS TESTE", "FIM NEGATIVO"];
-		
-		for (i = 0; i < positiveReviews.length; i++) {
-			document.getElementById("positive_reviews").innerHTML += "<li>" + positiveReviews[i] + "</li>"; // adiciona os reviews positivos
-		}
-		for (i = 0; i < negativeReviews.length; i++) {
-			document.getElementById("negative_reviews").innerHTML += "<li>" + negativeReviews[i] + "</li>"; // adiciona os reviews negativos
-		}
-	}));*/
+	xhr.send();*/
 }

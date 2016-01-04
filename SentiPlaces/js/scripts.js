@@ -4,6 +4,8 @@ var myRadius;
 var marker;
 var myZoom;
 
+$("#radius_option").click(function() { updateCircleRadius(map, myCenter) });
+
 $(document).ready(function() {
 	 $('#ex1').slider({
 		formatter: function(radius) {
@@ -50,9 +52,6 @@ function updateMap(map, first) {
 			myCenter = new google.maps.LatLng(pos);
 		
 			updateUsersPosition(map, 1); // detectLocation = 1 : para criar o toolbox escrito "You are here"
-		
-			// criando circulo de raio 2km em relacao ao myCenter
-			$("#radius_option").click(function() { updateCircleRadius(map, myCenter); });	
 			if (first == true) updateCircleRadius(map, myCenter); // cria o circulo default, de 2km		
 			//addingMarkers();
 
@@ -185,8 +184,6 @@ function updateLocation(option, autocomplete) {
 	//console.log(myCenter.lat());
 	//console.log(myCenter.lng());
 	updateCircleRadius(map, myCenter);	
-	
-	$("#radius_option").click(function() { updateCircleRadius(map, myCenter) });
 	
 	updateMarkerPosition(map);
 	
