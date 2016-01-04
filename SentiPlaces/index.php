@@ -42,7 +42,7 @@
 	<div class="jumbotron"> <!-- deixa o conteudo texto responsivo -->
 	  <div class="row">	
 		<div class="col-xs-6" id="left">
-			<div style="background-color:#D8D8D8" class="col-xs-12 text-center"><img  height="63px" src="css/SentiPlaces.png"/></div>
+			<div style="background-color:#D8D8D8" class="col-xs-12 text-center"><a href="index.php"><img  height="63px" src="css/SentiPlaces.png"/></a></div>
 			<div class="row"><br>
 				<div class="col-xs-8" id="left"><br>
 					<h4 id="restaurants_name">Waiting for a place...</h4>

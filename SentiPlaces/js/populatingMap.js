@@ -1,5 +1,5 @@
-var restaurantMarker;
-var place_marker;// = new Array();
+var restaurantMarker = [];
+var placeMarker;
 
 function createCORSRequest(method, url) {
 	var xhr = new XMLHttpRequest();
@@ -22,19 +22,16 @@ function createCORSRequest(method, url) {
 
 function addingMarkers() {
 	document.getElementById("loading").style.visibility="visible";
-	//place_marker.setMap(null);
+	
+	for (var i = 0; i < restaurantMarker.length; i++) {
+    restaurantMarker[i].setMap(null);
+  }
+	restaurantMarker = [];
+
 	// Declare and set location variables
-	var myCenter = map.getCenter();
+	//var myCenter = map.getCenter();
 	var lat = myCenter.lat();
 	var lng = myCenter.lng();
-	/*var rdbRadius = document.getElementsByName("radius");	
-	for(var i = 0; i < rdbRadius.length; i++)
-		if(rdbRadius[i].checked) 
-			radius = rdbRadius[i].value*1000; // Radius value must be sent to API in meters*/
-
-	//console.log("Lat: " + lat);
-	//console.log("Lng: " + lng);
-	//console.log("Radius: " + radius);
 
 	// API Call handle
 	var xhr = new XMLHttpRequest();
@@ -68,47 +65,34 @@ function addingMarkers() {
 		console.log(location.length);
 		var geocoder, i;
 		var markerColor, markerOpacity;
-		/*for (i=0;i<place_marker.length;i++) {
-			console.log(place_marker[i]);
-			place_marker[i].setMap(null);
-		}*/
+		var position, polarity;
 		
 	    // Loop through our array of markers & place each one on the map  
 	    for (i = 0; i < location.length; i++) {
-	        var position = new google.maps.LatLng(location[i][2], location[i][3]);
-			var polarity = location[i][4] - location[i][5];
+	      position = new google.maps.LatLng(location[i][2], location[i][3]);
+				polarity = location[i][4] - location[i][5];
 			
-			markerColor = markersColors(polarity);
-			markerOpacity = markersOpacity(polarity);
+				markerColor = markersColors(polarity);
+				markerOpacity = markersOpacity(polarity);
 			
-			// star marker
-			restaurantMarker = { // marker's icon
-				//path: google.maps.SymbolPath.CIRCLE,
-				path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
-				fillColor: markerColor,
-				fillOpacity: markerOpacity,
-				scale: 0.12,
-				strokeColor: "black",
-				strokeWeight: 0.5
-			};
-			place_marker = new google.maps.Marker({
-				position: position,
-				icon: restaurantMarker,
-				map: map,
-				title: location[i][1]
-			});
+					// star placeMarker
+					placeIcon = { // placeMarker's icon
+					path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+					fillColor: markerColor,
+					fillOpacity: markerOpacity,
+					scale: 0.12,
+					strokeColor: "black",
+					strokeWeight: 0.5
+				};
+				placeMarker = new google.maps.Marker({
+					position: position,
+					icon: placeIcon,
+					title: location[i][1]
+				});
+				restaurantMarker.push(placeMarker);
+				restaurantMarker[i].setMap(map);
 
-			/*
-			// circle marker
-			place_marker=new google.maps.Marker({
-				position:position,
-				icon: {path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: markerColor, fillOpacity: markerOpacity, strokeWeight: 1}
-			});
-			place_marker.setMap(map);*/				
-
-			markersInfoBox(i, location, xhr);
-			//getReviews();
-			
+				markersInfoBox(i, location, xhr);	
 	    }
 		document.getElementById("loading").style.visibility="hidden";
 	};
@@ -117,8 +101,6 @@ function addingMarkers() {
 		document.getElementById("loading").style.visibility="hidden";
 	};
 	xhr.send();
-	//console.log("data received:");
-	//console.log(location);
 }
 
 function markersColors(polarity) { // polarity = location[i][3]
@@ -147,17 +129,18 @@ function markersOpacity(polarity) {
 }
 
 function markersInfoBox(i, location, xhr) {
-	infowindow = new google.maps.InfoWindow()
-	google.maps.event.addListener(place_marker, 'click', (function(place_marker, i) {
+	infowindowPlace = new google.maps.InfoWindow()
+	google.maps.event.addListener(placeMarker, 'click', (function(placeMarker, i) {
 			return function() {
+				infowindowLocation.close();		
 				position = new google.maps.LatLng(location[i][2], location[i][3]);
 				geocoder = new google.maps.Geocoder();
 				geocoder.geocode({'latLng': position}, function (results, status) {
 					if (status === google.maps.GeocoderStatus.OK) {
 						if (results[1]) {
 							qtdReviews = location[i][4] + location[i][5];
-							infowindow.setContent("<b><center>" + location[i][1] + "</b><br>" + results[1].formatted_address + "<br>Number of reviews: " + qtdReviews + "<br>" + location[i][4] + "+ | " + location[i][5] + "-");
-							infowindow.open(map, place_marker);
+							infowindowPlace.setContent("<b><center>" + location[i][1] + "</b><br>" + results[1].formatted_address + "<br>Number of reviews: " + qtdReviews + "<br>" + location[i][4] + "+ | " + location[i][5] + "-");
+							infowindowPlace.open(map, placeMarker);
 						}
 					}
 					document.getElementById("restaurants_name").innerHTML = location[i][1]; //adicionando o nome do restaurante ao HTML
@@ -167,11 +150,7 @@ function markersInfoBox(i, location, xhr) {
 				});
 			}
 			
-      })(place_marker, i));
-}
-
-function removingMarkers() {
-	
+      })(placeMarker, i));
 }
 
 function choosingPlacesCategory() {
@@ -187,7 +166,6 @@ function tipsColors(polarity) { //polary range: [-4, 4]
 	var width = (polarity+4)*12;
 	var positive_width = width;
 	var negative_width = total - positive_width;
-	console.log("Positive: " + positive_width + "Negative: " + negative_width);
 	return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
 			"<div style=\"background-color:#53c653; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
 }
