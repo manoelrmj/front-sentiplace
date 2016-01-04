@@ -54,7 +54,7 @@ function updateMap(map, first) {
 			// criando circulo de raio 2km em relacao ao myCenter
 			$("#radius_option").click(function() { updateCircleRadius(map, myCenter); });	
 			if (first == true) updateCircleRadius(map, myCenter); // cria o circulo default, de 2km		
-			addingMarkers();
+			//addingMarkers();
 
 		}, function() {
 			//handleLocationError(true, infoWindow, map.getCenter());
@@ -65,6 +65,7 @@ function updateMap(map, first) {
 
 function handleLocationError(){
 	window.alert("We weren't able to determine your location. Please, check your browser settings.");
+	myCenter = new google.maps.LatLng(-19.8714019,-43.9703503);  // UFMG Campus
 }
 
 function updateCircleRadius(map, myCenter) {

@@ -64,11 +64,12 @@
 				<ul><li>Select a location and see the nearest places to go</li><br>
 				<li>Filter by a specific place category</li><br>
 				<li>Choose the coverage radius</li> <br>
-				<li>Check what people talks about the place that you picked up.</li><br>
+				<li>Check what people are talking about the place that you picked up.</li><br>
 				<li>Identify how positive/negative the place is, based on the star color.</li></ul><br><br><br>
 							
-				All the places' tips come from Foursquare, one of the most popular local search and discovery service which provides location-based search results for its users.<br><br><br>
-				Do you wanna try it out? Select a location, a place category, and let' s go!
+				All the places' tips come from Foursquare, one of the most popular local search and discovery service which provides location-based search results for its users.<br><br>
+				Our tool then, use sentiment analysis techniques to classify the tips between positive and negative so you can find out more about the place you've selected!
+				Do you wanna try it out? Allow the page to get your location or select one in the search bar, a place category, and let' s go!
 				</div>
 			</span>
 			
@@ -105,12 +106,12 @@
 		<script src="http://maps.googleapis.com/maps/api/js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script src="http://maps.googleapis.com/maps/api/js?sensor=false&extension=.js&output=embed"></script>
+		<script src="http://maps.googleapis.com/maps/api/js?extension=.js&output=embed"></script>
 		<script src="js/scripts.js"></script>
 		<script src="js/populatingMap.js"></script>
 		<script type='text/javascript' src="js/bootstrap-slider.js"></script>
 		<script type='text/javascript' src="js/modernizr.js"></script>
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
 	</body>
 </html>
