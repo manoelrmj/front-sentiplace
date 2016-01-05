@@ -12,7 +12,7 @@ $("#category").click(function() { choosingPlacesCategory(); });
 $(document).ready(function() {
 	 $('#radius_slider').slider({
 		formatter: function(radius) {
-			document.getElementById("radius").innerHTML = radius;
+			document.getElementById("radius").innerHTML = "Filter by Radius: " + radius;
 			myRadius = radius * 1000;
 	        return 'Current value: ' + radius + ' km';
 	    }
@@ -21,9 +21,13 @@ $(document).ready(function() {
 
 function initMap() { // inicializando um objeto mapa
 	document.getElementById("tips_area").style.display="none";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
+	document.getElementById("slider_bar").style.visibility="hidden";
+	
 	myRadius = 1000;
-	var myCenter = new google.maps.LatLng(38.8833,-98.0167);  // UFMG Campus
-	myZoom = 14;
+	var myCenter = new google.maps.LatLng(38.8833,-98.0167);  // US lat and lng
+	myZoom = 4;
 	map = new google.maps.Map(document.getElementById('googleMap'), {
 		center: myCenter,
 		zoom: myZoom	
@@ -33,11 +37,7 @@ function initMap() { // inicializando um objeto mapa
 }
 
 function updateMap(map, first) {
-	document.getElementById("tips_area").style.display="none";
-	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
-	document.getElementById("home_introduction").style.display="inline";
 	var pos, myCity;
-
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			pos = {lat: position.coords.latitude,
@@ -47,7 +47,7 @@ function updateMap(map, first) {
 			myCenter = new google.maps.LatLng(pos);
 		
 			updateUsersPosition(map, 1); // detectLocation = 1 : para criar o toolbox escrito "You are here"
-			updateCircleRadius(map, myCenter); // cria o circulo default, de 2km		
+			updateCircleRadius(map, myCenter); // cria o circulo default, de 1km	
 		}, function() {
 			handleLocationError();
 		});
@@ -57,10 +57,11 @@ function updateMap(map, first) {
 function handleLocationError(){
 	window.alert("We weren't able to determine your location. Please, check your browser settings.");
 	myCenter = new google.maps.LatLng(38.8833,-98.0167);  // UFMG Campus
-	document.getElementById("loading").innerHTML ="Search a location";
+	document.getElementById("loading").style.visibility="hidden";
 }
 
 function updateCircleRadius(map, myCenter) {
+	document.getElementById("slider_bar").style.visibility="visible";		
 	if (myRadius == 4000) myZoom = 13;
 	else if (myRadius == 7000) myZoom = 13;
 	else if (myRadius > 7000) myZoom = 12;
