@@ -15,7 +15,6 @@ html,body{
 }
 
 body{
-  	padding-top:50px; /*padding for navbar*/
 	font-family: verdana, sans-serif;
 }
 
@@ -75,7 +74,7 @@ body{
 	max-width = 700px;
 }
 
-#ex1Slider .slider-selection {
+#ex1Slider .slider-selection { 
    	background: #BABABA;
 }
 
@@ -84,7 +83,7 @@ div#loading{
 	opacity: 0.7;
 	position: absolute;
     z-index:10;
-	top: 140px;
+	top: 100px;
 	width: 98%;
 	height: 785px;
 }

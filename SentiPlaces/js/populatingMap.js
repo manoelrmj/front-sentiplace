@@ -1,5 +1,7 @@
 var restaurantMarker = [];
 var placeMarker;
+var placeCategory;
+var category_aux;
 
 function createCORSRequest(method, url) {
 	var xhr = new XMLHttpRequest();
@@ -154,11 +156,14 @@ function markersInfoBox(i, location, xhr) {
 }
 
 function choosingPlacesCategory() {
-	var placeCategory = document.getElementById("category").value;
-	//console.log(placeCategory);
-	document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
-	document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
-	addingMarkers(placeCategory);
+	placeCategory = document.getElementById("category").value;
+	if (placeCategory != category_aux) {
+		document.getElementById("tips_area").style.display="none";
+		document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+		document.getElementById("home_introduction").style.display="inline";
+		addingMarkers(placeCategory);
+	}
+	category_aux = placeCategory;
 }
 
 function tipsColors(polarity) { //polary range: [-4, 4]

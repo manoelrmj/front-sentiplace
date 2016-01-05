@@ -21,16 +21,13 @@
 	</head>
 	<body onload="initMap()"> 
 <!-- begin template -->
-<div class="navbar navbar-custom navbar-fixed-top">
+<div class="navbar navbar-custom">
  <div class="navbar-header"><a class="navbar-brand">Enter a location</a></div>
     <div class="navbar-collapse collapse">
       <form class="navbar-form">
         <div class="form-group" style="display:inline;">
           <div class="input-group">
-			<div class="row">
-				<div class="col-xs-10"> <input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:580px" onclick="getSearchLocation()"></div></input>
-				<div class="col-xs-2 text-center"> <a onclick="getSearchLocation();"><img src="css/search_icon.png" height="33px" /></a></div>
-			</div>
+			<input type="text" id="pac-input" class="controls form-control" placeholder="What are searching for?" style="width:580px" onclick="getSearchLocation()"></input>
         </div>
 		</div>
       </form>
@@ -50,7 +47,7 @@
 				<div class="col-xs-4 form-group">
 					<br>Choose a place category
 					<select class="form-control" id="category">
-						<option id="all_category">All places</option>
+						<option id="all_category" value="0">All places</option>
 						<option id="arts_category" value="4d4b7104d754a06370d81259">Arts & Entertainment</option>
 						<option id="college_category" value="4d4b7105d754a06372d81259">College & University</option>
 						<option id="food_category" value="4d4b7105d754a06374d81259">Food</option>
@@ -99,7 +96,7 @@
 				</form>
 			</div>			
 			<div id="loader-wrapper">
-			<br><h1><div id="loading" class="text-center" style="color:#D8D8D8;">Loading...</div></h1>
+			<h1><div id="loading" class="text-center" style="color:#D8D8D8;">Loading...</div></h1>
 			<div id="googleMap" class="img-responsive"></div>
 		</div>
 	  </div>

@@ -25,6 +25,8 @@ function initMap() { // inicializando um objeto mapa
 	document.getElementById("home_introduction").style.display="inline";
 	document.getElementById("slider_bar").style.visibility="hidden";
 	
+	category_aux = 0;
+	
 	myRadius = 1000;
 	var myCenter = new google.maps.LatLng(38.8833,-98.0167);  // US lat and lng
 	myZoom = 4;
