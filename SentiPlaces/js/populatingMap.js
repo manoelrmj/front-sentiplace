@@ -207,11 +207,11 @@ function getReviews(location, xhr) {
 		}
 
 		for (i = 0; i < positiveReviews.length; i++) {
-			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(2) + "</li><hr>"; // usando valor de teste
+			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i></li>" +tipsColors(2) + " <hr>"; // usando valor de teste
 			// document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 		for (i = 0; i < negativeReviews.length; i++) {
-			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(-2) + "</li><hr>"; // usando valor de teste
+			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i></li>" +tipsColors(-2) + " <hr>"; // usando valor de teste
 			// document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 
