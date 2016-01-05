@@ -7,9 +7,10 @@ var infoWindowLocation;
 var infoWindowPlace;
 
 $("#radius_option").click(function() { updateCircleRadius(map, myCenter) });
+$("#category").click(function() { choosingPlacesCategory(); });
 
 $(document).ready(function() {
-	 $('#ex1').slider({
+	 $('#radius_slider').slider({
 		formatter: function(radius) {
 			document.getElementById("radius").innerHTML = radius;
 			myRadius = radius * 1000;
@@ -21,16 +22,14 @@ $(document).ready(function() {
 function initMap() { // inicializando um objeto mapa
 	document.getElementById("tips_area").style.display="none";
 	myRadius = 1000;
-	var myCenter = new google.maps.LatLng(-19.8714019,-43.9703503);  // UFMG Campus
-	myZoom = 15;
+	var myCenter = new google.maps.LatLng(38.8833,-98.0167);  // UFMG Campus
+	myZoom = 14;
 	map = new google.maps.Map(document.getElementById('googleMap'), {
 		center: myCenter,
 		zoom: myZoom	
 	});
 	myCity = new google.maps.Circle({center:myCenter});
 	updateMap(map, true);
-	
-	$("#category").click(function() { choosingPlacesCategory(); });
 }
 
 function updateMap(map, first) {
@@ -57,14 +56,16 @@ function updateMap(map, first) {
 
 function handleLocationError(){
 	window.alert("We weren't able to determine your location. Please, check your browser settings.");
-	myCenter = new google.maps.LatLng(-19.8714019,-43.9703503);  // UFMG Campus
+	myCenter = new google.maps.LatLng(38.8833,-98.0167);  // UFMG Campus
+	document.getElementById("loading").innerHTML ="Search a location";
 }
 
 function updateCircleRadius(map, myCenter) {
-	if (myRadius == 4000) map.setZoom(14);
-	else if (myRadius == 7000) map.setZoom(13);
-	else if (myRadius > 7000) map.setZoom(12);
-	else map.setZoom(15);
+	if (myRadius == 4000) myZoom = 13;
+	else if (myRadius == 7000) myZoom = 13;
+	else if (myRadius > 7000) myZoom = 12;
+	else myZoom = 15;
+	map.setZoom(myZoom);
 	
 	myCity.setMap(null); // remove the circle to update with the new radius
 	addingMarkers(); //
@@ -133,7 +134,7 @@ function updateUsersPosition(map, detectLocation) {
 	}
 }
 
-function updateLocation(option, autocomplete) {
+function updateLocation(autocomplete) {
 	infowindowLocation = new google.maps.InfoWindow();
 	infowindowLocation.close();
 	
@@ -197,7 +198,6 @@ function getSearchLocation() {
 	
 	// Get the full place details when the user selects a place from the list of suggestions.
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
-		updateLocation(1, autocomplete);
+		updateLocation(autocomplete);
 	});
-	updateLocation(0, autocomplete);
 }

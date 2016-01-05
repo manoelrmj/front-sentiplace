@@ -166,8 +166,12 @@ function tipsColors(polarity) { //polary range: [-4, 4]
 	var width = (polarity+4)*12;
 	var positive_width = width;
 	var negative_width = total - positive_width;
-	return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
-			"<div style=\"background-color:#53c653; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
+	if (positive_width > negative_width)
+		return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
+			"<div style=\"background-color:green; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
+	else
+		return "<div style=\"background-color:green; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>" +
+			"<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>";
 }
 
 function getCookie(cname) {
@@ -207,11 +211,11 @@ function getReviews(location, xhr) {
 		}
 
 		for (i = 0; i < positiveReviews.length; i++) {
-			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(2) + "</li><hr>"; // usando valor de teste
+			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i></li>" +tipsColors(2) + " <hr>"; // usando valor de teste
 			// document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 		for (i = 0; i < negativeReviews.length; i++) {
-			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(-2) + "</li><hr>"; // usando valor de teste
+			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i></li>" +tipsColors(-2) + " <hr>"; // usando valor de teste
 			// document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
 		}
 
