@@ -6,8 +6,7 @@ var category_aux;
 function createCORSRequest(method, url) {
 	var xhr = new XMLHttpRequest();
 	if ("withCredentials" in xhr) {
-
-	    // Check if the XMLHttpRequest object has a "withCredentials" property.
+		// Check if the XMLHttpRequest object has a "withCredentials" property.
 	    // "withCredentials" only exists on XMLHTTPRequest2 objects.
 		xhr.open(method, url, true);
 	} else if (typeof XDomainRequest != "undefined") {
@@ -24,10 +23,9 @@ function createCORSRequest(method, url) {
 
 function addingMarkers() {
 	document.getElementById("loading").style.visibility="visible";
-	
 	for (var i = 0; i < restaurantMarker.length; i++) {
-    restaurantMarker[i].setMap(null);
-  }
+    	restaurantMarker[i].setMap(null);
+  	}
 	restaurantMarker = [];
 
 	// Declare and set location variables
@@ -37,34 +35,32 @@ function addingMarkers() {
 
 	// API Call handle
 	var xhr = new XMLHttpRequest();
-	var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + 
-		"&lng=" + lng + "&rd=" + myRadius); // var closestVenuesURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/closestvenues?lat=" + lat + "&lng=" + lng + "&rd=" + radius);
-	console.log(closestVenuesURL);
-	/*xhr.open("GET", closestVenuesURL, false);
-	xhr.setRequestHeader('Content-Type', 'text/json');
-	xhr.send();
-	console.log(xhr.status);
-	console.log(xhr.statusText);
-
-	var json_response = JSON.parse(xhr.responseText);
-	console.log(json_response);*/
+	var closestVenuesURL;
+	var category = document.getElementById("category");
+	var selectedCategory = category.options[category.selectedIndex].value;
+	
+	if(selectedCategory == 0) 
+		closestVenuesURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
+			"&lng=" + lng + "&rd=" + myRadius);
+	else 
+		closestVenuesURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
+			"&lng=" + lng + "&rd=" + myRadius + "&ctg=" + selectedCategory);
+	//console.log(closestVenuesURL);
 	var xhr = createCORSRequest('GET', closestVenuesURL);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
 	// This function parse the JSON response and put the places in the map
 	xhr.onload = function() { 
-		//xhr.getResponseHeader('Set-Cookie');
 		// process the response.
 		var json_response = JSON.parse(xhr.responseText);
 		var location = [];
 		for (var i = 0; i < json_response.length; i++){
-			//console.log(json_response[i].name);
 			var aux_array = [json_response[i].id, json_response[i].name, json_response[i].location.lat, json_response[i].location.lng,
 			 	json_response[i].polarityAux.positiveCount, json_response[i].polarityAux.negativeCount];
 			location.push(aux_array);
 		}
-		console.log(location.length);
+		//console.log(location.length);
 		var geocoder, i;
 		var markerColor, markerOpacity;
 		var position, polarity;
@@ -195,7 +191,7 @@ function getReviews(location, xhr) {
 	document.getElementById("home_introduction").style.display="none";
 	document.getElementById("positive_reviews").innerHTML = "";
 	document.getElementById("negative_reviews").innerHTML = "";
-	var tipsByVenueURL = ("http://150.164.11.206:8080/deliverable8s/rest/foursquare/tipsbyvenue/" + location[0]);
+	var tipsByVenueURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/tipsbyvenue/" + location[0]);
 	xhr.open("GET", tipsByVenueURL, true);
 	
 	// This function parse the JSON response and put the tips in the text fields
