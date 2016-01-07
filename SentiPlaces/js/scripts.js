@@ -64,10 +64,10 @@ function handleLocationError(){
 
 function updateCircleRadius(map, myCenter) {
 	document.getElementById("slider_bar").style.visibility="visible";		
-	if (myRadius == 4000) myZoom = 13;
-	else if (myRadius == 7000) myZoom = 13;
-	else if (myRadius > 7000) myZoom = 12;
-	else myZoom = 15;
+	if (myRadius == 1000) myZoom = 15;
+	else if (myRadius == 2000 | myRadius == 3000) myZoom = 14;
+	else if (myRadius == 4000 | myRadius == 5000 | myRadius == 6000 | myRadius == 7000 ) myZoom = 13;
+	else myZoom = 12;
 	map.setZoom(myZoom);
 	
 	myCity.setMap(null); // remove the circle to update with the new radius
