@@ -40,10 +40,10 @@ function addingMarkers() {
 	var selectedCategory = category.options[category.selectedIndex].value;
 	
 	if(selectedCategory == 0) 
-		closestVenuesURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
+		closestVenuesURL = ("http://200.131.6.130:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
 			"&lng=" + lng + "&rd=" + myRadius);
 	else 
-		closestVenuesURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
+		closestVenuesURL = ("http://200.131.6.130:8085/sentiplaces/rest/foursquare/closestvenues?lat=" + lat + 
 			"&lng=" + lng + "&rd=" + myRadius + "&ctg=" + selectedCategory);
 	//console.log(closestVenuesURL);
 	var xhr = createCORSRequest('GET', closestVenuesURL);
@@ -191,7 +191,7 @@ function getReviews(location, xhr) {
 	document.getElementById("home_introduction").style.display="none";
 	document.getElementById("positive_reviews").innerHTML = "";
 	document.getElementById("negative_reviews").innerHTML = "";
-	var tipsByVenueURL = ("http://blackbird.dcc.ufmg.br:8085/sentiplaces/rest/foursquare/tipsbyvenue/" + location[0]);
+	var tipsByVenueURL = ("http://200.131.6.130:8085/sentiplaces/rest/foursquare/tipsbyvenue/" + location[0]);
 	xhr.open("GET", tipsByVenueURL, true);
 	
 	// This function parse the JSON response and put the tips in the text fields
