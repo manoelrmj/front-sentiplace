@@ -5,6 +5,7 @@ var locationMarker;
 var myZoom;
 var infoWindowLocation;
 var infoWindowPlace;
+var geocoder;
 
 $("#radius_option").click(function() { updateCircleRadius(map, myCenter) });
 $("#category").click(function() { choosingPlacesCategory(); });
@@ -36,6 +37,7 @@ function initMap() { // inicializando um objeto mapa
 	});
 	myCity = new google.maps.Circle({center:myCenter});
 	updateMap(map, true);
+	geocoder = new google.maps.Geocoder();
 }
 
 function updateMap(map, first) {
@@ -185,6 +187,50 @@ function updateLocation(autocomplete) {
 	addingMarkers();	
 }
 
+function updateLocation2(place) {
+	if (!place.geometry) { return; }
+		
+	map = new google.maps.Map(document.getElementById('googleMap')); // preciso recriar o mapa para atualizar a localizacao
+		
+	updateMarkerPosition();
+
+	if (place.geometry.viewport) {
+		map.fitBounds(place.geometry.viewport);
+		map.setCenter(place.geometry.location);
+		map.setZoom(myZoom);
+	} else {
+		  map.setCenter(place.geometry.location);
+		  map.setZoom(myZoom);
+	}
+	
+	// Set the position of the marker using the place ID and location.
+	locationMarker.setPlace(/** @type {!google.maps.Place} */ ({
+		placeId: place.place_id,
+		location: place.geometry.location
+	}));
+
+	infowindowLocation.setContent('<div><strong>' + place.formatted_address + '</div>');
+	infowindowLocation.open(map, locationMarker);
+		
+	myCenter = place.geometry.location;
+	updateCircleRadius(map, myCenter);	
+	
+	updateMarkerPosition(map);
+	
+	google.maps.event.addListener(locationMarker,'click',function() {
+		map.setZoom(myZoom);
+		map.setCenter(place.geometry.location);
+		infowindowPlace.close();
+		infowindowLocation.open(map, locationMarker);
+	});
+	
+	document.getElementById("tips_area").style.display="none";
+	document.getElementById("restaurants_name").innerHTML ="Waiting for a place...";
+	document.getElementById("home_introduction").style.display="inline";
+	
+	addingMarkers();	
+}
+
 function getSearchLocation() {
 	var input = /** @type {HTMLInputElement} */(
     document.getElementById('pac-input'));
@@ -194,8 +240,9 @@ function getSearchLocation() {
 	
 	$('#pac-input').keypress(function(e) { // aceitar enter para realizar a busca
 		if (e.which == 13) {
-			google.maps.event.trigger(autocomplete, 'place_changed');
-    		return false;
+			//alert("Enter Pressionado!");
+			codeAddress();
+			return false;
 		}
 	});
 	
@@ -203,4 +250,17 @@ function getSearchLocation() {
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		updateLocation(autocomplete);
 	});
+}
+
+function codeAddress() {
+    var address = document.getElementById("pac-input").value;
+	//alert("Foi inserido: " + address);
+	geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+		//var latitude = results[0].geometry.location.lat();
+		//var longitude = results[0].geometry.location.lng();
+		//alert(latitude);
+		updateLocation2(results[0]);
+		} 
+	});	
 }

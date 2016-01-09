@@ -162,17 +162,20 @@ function choosingPlacesCategory() {
 	category_aux = placeCategory;
 }
 
-function tipsColors(polarity) { //polary range: [-4, 4]
-	var total = 8*12;
-	var width = (polarity+4)*12;
-	var positive_width = width;
-	var negative_width = total - positive_width;
-	if (positive_width > negative_width)
-		return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
+function tipsColors(score) { //polary range: [-1, 1]
+	var total = 96;
+	var positive_width = total/2;
+	var negative_width = total/2;
+	var diff = Math.abs((total/2)*score);
+	if(score > 0){
+		positive_width += diff;
+		negative_width -= diff;
+	}else if(score < 0){
+		negative_width += diff;
+		positive_width -= diff;
+	}
+	return "<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>"+
 			"<div style=\"background-color:green; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>";
-	else
-		return "<div style=\"background-color:green; width: "+positive_width+"px; height:12px; display: inline-block;float:right; opacity: 0.5\"></div>" +
-			"<div style=\"background-color:red; width: "+negative_width+"px; height:12px; display: inline-block; float:right; opacity: 0.5\"></div>";
 }
 
 function getCookie(cname) {
@@ -201,23 +204,27 @@ function getReviews(location, xhr) {
 		document.getElementById("positive_reviews").innerHTML = ""; //limpa o campo de reviews positivos
 		document.getElementById("negative_reviews").innerHTML = ""; //limpa o campo de reviews negativos
 		var json_response = JSON.parse(xhr.responseText);
+		//console.log(xhr.responseText);
 		var positiveReviews = [];
 		var negativeReviews = [];
 		for(i=0; i<json_response.length; i++){
-			if(json_response[i].polarity == 1)
-				positiveReviews.push(json_response[i].text);
+			var review = [];
+			if(json_response[i].polarity == 1){
+				review.push(json_response[i].text);
+				review.push(json_response[i].polarityScore);
+				positiveReviews.push(review);
+			}
 			else if(json_response[i].polarity == -1){
-				negativeReviews.push(json_response[i].text);
+				review.push(json_response[i].text);
+				review.push(json_response[i].polarityScore);
+				negativeReviews.push(review);
 			}
 		}
-
 		for (i = 0; i < positiveReviews.length; i++) {
-			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i></li>" +tipsColors(2) + " <hr>"; // usando valor de teste
-			// document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
+			document.getElementById("positive_reviews").innerHTML += "<li><i>" + positiveReviews[i][0] + "</i></li>" +tipsColors(positiveReviews[i][1]) + " <hr>";
 		}
 		for (i = 0; i < negativeReviews.length; i++) {
-			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i></li>" +tipsColors(-2) + " <hr>"; // usando valor de teste
-			// document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i] + "</i>" + tipsColors(json_response[i].polarity) + "</li><hr>";
+			document.getElementById("negative_reviews").innerHTML += "<li><i>" + negativeReviews[i][0] + "</i></li>" +tipsColors(negativeReviews[i][1]) + " <hr>";
 		}
 
 	};
